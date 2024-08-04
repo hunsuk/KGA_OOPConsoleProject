@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Drawing;
 using System.Runtime.Intrinsics.Arm;
+using ZombieGame;
 using static ConsoleProject1.Program;
 
 namespace ConsoleProject1
@@ -17,7 +18,6 @@ namespace ConsoleProject1
             public Point playerPos;
             public Zombie[] zombies;
         }
-
 
         public struct Zombie
         {
@@ -57,7 +57,6 @@ namespace ConsoleProject1
             int hight = 20;
             int invenHight = 5;
             Console.CursorVisible = false;
-
 
             data = new GameData();
             data.running = true;
@@ -638,23 +637,30 @@ namespace ConsoleProject1
             Chase();
             GetItem();
             InventoryArrange();
-
         }
 
-
-        static void Main(string[] args)
+        static void Main(string[] args) 
         {
-            Start();
-
-            while (data.running)
+            GameSystem gameSystem = new GameSystem();
+            gameSystem.Start();
+            
+            while(gameSystem.GetRunning())
             {
-                Rander();
-                Input();
-                Update();
-                Thread.Sleep(2);
+                gameSystem.Render();
+                gameSystem.Input();
+                gameSystem.Update();
             }
+            //Start();
 
-            End();
+            //while (data.running)
+            //{
+            //    Rander();
+            //    Input();
+            //    Update();
+            //    Thread.Sleep(2);
+            //}
+
+            //End();
         }
     }
 }

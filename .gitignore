@@ -16,3 +16,12 @@ obj/Debug/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs
 .vs/ZombieGame/FileContentIndex/aea07a87-26e4-42a3-ac79-d3864da0be1a.vsidx
 .vs/ZombieGame/FileContentIndex/a5dbed20-5b1f-4de3-b038-8342da33fb04.vsidx
 .vs/ZombieGame/FileContentIndex/4a22475d-415b-4eae-bbcd-82fefe564c56.vsidx
+*.json
+*.pdb
+*.cache
+*.dll
+*.txt
+*.BuildWithSkipAnalyzers
+*.exe
+*.v2
+*.vsidx
