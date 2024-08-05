@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices.JavaScript;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ZombieGame
@@ -33,18 +34,6 @@ namespace ZombieGame
                     map.Add(new Pixel(new Vec2(i,j)));
                 }
             }
-            //for (int i = 0; i < width; i++)
-            //{
-            //    map[0, i] = true;
-            //    map[hight - 1, i] = true;
-            //    map[hight + invenHight - 1, i] = true;
-            //}
-
-            //for (int i = 0; i < hight + invenHight; i++)
-            //{
-            //    map[i, 0] = true;
-            //    map[i, width - 1] = true;
-            //}
         }
 
         public List<Pixel> GetMap()
@@ -60,6 +49,14 @@ namespace ZombieGame
         public int GetHight()
         {
             return hight + invenHight;
+        }
+
+        public void UpdateObjects(List<Isbeing> objects)
+        {
+            foreach(Isbeing isbeing in objects)
+            {
+                map[isbeing.GetPosition().GetX() + width * isbeing.GetPosition().GetY()].SetIsBeing(isbeing);
+            }
         }
     }
 }

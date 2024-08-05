@@ -590,7 +590,6 @@ namespace ConsoleProject1
             PrintInventory();
             PrintPlayer();
             PrintZombies();
-
         }
 
         static void Input()
@@ -603,7 +602,6 @@ namespace ConsoleProject1
 
                 if (((int)data.inputKey >= 49 && (int)data.inputKey <= 51) || ((int)data.inputKey >= 37 && (int)data.inputKey <= 40))
                 {
-
                     if ((int)data.inputKey >= 49 && (int)data.inputKey <= 51)
                     {
                         if (isHaveItem((Weapon)(data.inputKey - 48)))
@@ -619,8 +617,6 @@ namespace ConsoleProject1
                     {
                         check = false;
                     }
-
-
                 }
                 else
                 {

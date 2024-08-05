@@ -44,17 +44,47 @@ namespace ZombieGame
 
         public void Render()
         {
+            Console.Clear();
             ui.DrawMap(map);
         }
 
         public void Input()
         {
-            userInput = Console.ReadKey().Key;
+            bool check = false;
+            Console.CursorVisible = false;
+            Console.ForegroundColor = ConsoleColor.Black;
+            do
+            {
+                userInput = Console.ReadKey().Key;
+                if (((int)userInput >= 49 && (int)userInput <= 51) || ((int)userInput >= 37 && (int)userInput <= 40))
+                {
+                    if ((int)userInput >= 49 && (int)userInput <= 51)
+                    {
+                        if (user.GetInventory().HaveItem((WeaponType)(userInput - 48)))
+                        {
+                            check = false;
+                        }
+                        else
+                        {
+                            check = true;
+                        }
+                    }
+                    else
+                    {
+                        check = false;
+                    }
+                }
+                else
+                {
+                    check = true;
+                }
+            } while (check);
         }
 
         public void Update()
         {
-
+            Move();
+            map.UpdateObjects(objects);
         }
 
         public bool GetRunning()
@@ -181,6 +211,29 @@ namespace ZombieGame
             objects.Add(zombie2);
             objects.Add(zombie3);
             objects.Add(zombie4);
+        }
+
+        private void Move()
+        {
+            switch (userInput)
+            {
+                case ConsoleKey.W:
+                case ConsoleKey.UpArrow:
+                    user.MoveUp(map);
+                    break;
+                case ConsoleKey.S:
+                case ConsoleKey.DownArrow:
+                    user.MoveDown(map);
+                    break;
+                case ConsoleKey.A:
+                case ConsoleKey.LeftArrow:
+                    user.MoveLeft(map);
+                    break;
+                case ConsoleKey.D:
+                case ConsoleKey.RightArrow:
+                    user.MoveRight(map);
+                    break;
+            }
         }
     }
 }

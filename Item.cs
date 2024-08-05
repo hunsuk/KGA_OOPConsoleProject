@@ -12,11 +12,21 @@ namespace ZombieGame
         private bool existence;
         private WeaponType type;
 
+        public Item(WeaponType type)
+        {
+            this.type = type;
+        }
+
         public Item(int x, int y, WeaponType type)
         {
             this.postion = new Vec2(x, y);
             this.type = type;
             existence = true;
+        }
+
+        public WeaponType GetWeapon()
+        {
+            return type;
         }
 
         public Vec2 GetPosition()

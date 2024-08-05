@@ -26,6 +26,11 @@ namespace ZombieGame
             return isbeing;
         }
 
+        public bool IsGo()
+        {
+            return !(this.isbeing is Wall);
+        }
+
         public void SetWeight(int weight)
         {
             this.weight = weight;
@@ -40,7 +45,6 @@ namespace ZombieGame
         {
             this.isbeing = isbeing;
         }
-
 
     }
 }

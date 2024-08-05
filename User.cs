@@ -8,12 +8,24 @@ namespace ZombieGame
 {
     public class User : People
     {
-        public User(int x, int y) : base(x, y) { }
+        private Inventory inventory;
 
+        public User(int x, int y) : base(x, y) 
+        {
+            inventory = new Inventory();
+        }
+
+        public Inventory GetInventory()
+        {
+            return inventory;
+        }
+        
         public override char GetSign()
         {
             Console.ForegroundColor = ConsoleColor.Green;
             return 'U';
         }
+
+
     }
 }
