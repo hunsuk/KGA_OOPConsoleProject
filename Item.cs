@@ -70,5 +70,10 @@ namespace ZombieGame
         {
             return existence;
         }
+
+        public void Disapear()
+        {
+            this.existence = false;    
+        }
     }
 }

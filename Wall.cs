@@ -17,6 +17,11 @@ namespace ZombieGame
             existence = true;
         }
 
+        public void Disapear()
+        {
+            this.existence = false;
+        }
+
         public Vec2 GetPosition()
         {
             return position;

@@ -21,12 +21,13 @@ namespace ZombieGame
             this.width = width;
             this.hight = hight;
             this.invenHight = invenHight;
-            map = new List<Pixel>((hight + invenHight) * width);
+            
             InitMap();
         }
 
         private void InitMap()
         {
+            map = new List<Pixel>((hight + invenHight) * width);
             for (int i = 0; i < hight + invenHight; i++)
             {
                 for (int j = 0; j < width; j++)
@@ -58,7 +59,8 @@ namespace ZombieGame
 
         public void UpdateObjects(List<Isbeing> objects)
         {
-            foreach(Isbeing isbeing in objects)
+            InitMap();
+            foreach (Isbeing isbeing in objects)
             {
                 map[isbeing.GetPosition().GetX() + width * isbeing.GetPosition().GetY()].SetIsBeing(isbeing);
             }

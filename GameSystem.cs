@@ -20,7 +20,6 @@ namespace ZombieGame
         
         private List<Isbeing> objects = null;
         private List<Zombie> zombies;
-        private List<Item> items;
         private User user;
         private Map map;
         private ConsoleKey userInput;
@@ -31,9 +30,8 @@ namespace ZombieGame
             map = new Map(width, hight, invenHight);
             objects = new List<Isbeing>();
             zombies = new List<Zombie>();
-            items = new List<Item>();
            
-            user = new User(15, 10, new Inventory(width, hight, invenHight));
+            user = new User(15, 10, new Inventory(width, hight, invenHight, objects));
             Item baseWeapon = new Item(1, hight, WeaponType.PISTOL);
             user.GetInventory().AddItem(baseWeapon);
            
@@ -66,7 +64,7 @@ namespace ZombieGame
                 {
                     if ((int)userInput >= 49 && (int)userInput <= 51)
                     {
-                        if (user.GetInventory().HaveItem((WeaponType)(userInput - 48)))
+                        if (user.GetInventory().HaveItem((WeaponType)(userInput - 48),true))
                         {
                             check = false;
                         }
@@ -89,6 +87,7 @@ namespace ZombieGame
 
         public void Update()
         {
+            Attack();
             Move();
             Crash();
             map.UpdateObjects(objects);
@@ -96,12 +95,16 @@ namespace ZombieGame
 
         public void Crash()
         {
-            for (int i = 0; i < items.Count; i++)
+            for (int i = 0; i < objects.Count; i++)
             {
-                if (items[i].GetPosition() == user.GetPosition())
+                if (objects[i] is Item)
                 {
-                    user.GetInventory().AddItem(items[i]);
+                    if (objects[i].GetPosition() == user.GetPosition())
+                    {
+                        user.GetInventory().AddItem((Item)objects[i]);
+                    }
                 }
+                
             }
         }
 
@@ -205,9 +208,7 @@ namespace ZombieGame
             Item item2 = new Item(5, 6, WeaponType.RIFLE);
             Item item3 = new Item(12, 4, WeaponType.SHOTGUN);
 
-            items.Add(item1);
-            items.Add(item2);
-            items.Add(item3);
+         
             objects.Add(item1);
             objects.Add(item2);
             objects.Add(item3);
@@ -228,6 +229,75 @@ namespace ZombieGame
             objects.Add(zombie2);
             objects.Add(zombie3);
             objects.Add(zombie4);
+        }
+
+        private void Attack()
+        {
+            int sight = 0;
+            int zombieCount = 0;
+            switch (userInput)
+            {
+
+                // 권총 
+                case ConsoleKey.D1:
+                    if (user.GetInventory().HaveItem(WeaponType.PISTOL))
+                    {
+                        sight = 1;
+                        zombieCount = 1;
+                    }
+                    break;
+
+                // 소총
+                case ConsoleKey.D2:
+                    if (user.GetInventory().HaveItem(WeaponType.RIFLE))
+                    {
+                        sight = 2;
+                        zombieCount = 1;
+                    }
+                    break;
+
+                //샷건
+                case ConsoleKey.D3:
+                    if (user.GetInventory().HaveItem(WeaponType.SHOTGUN))
+                    {
+                        sight = 2;
+                        zombieCount = 2;
+                    }
+                    break;
+            }
+
+            if (sight != 0)
+            {
+                for (int i = 0; i < zombies.Count; i++)
+                {
+
+                    if (zombieCount == 0)
+                    {
+                        break;
+                    }
+
+                    if (zombies[i].IsExistence() && shoot(sight, zombies[i].GetPosition()))
+                    {
+                        zombies[i].Disapear();
+                        zombieCount--;
+
+                    }
+
+                }
+            }
+
+        }
+        private bool shoot(int sight, Vec2 zombiePos)
+        {
+            int playerX = user.GetPosition().GetX();
+            int playerY = user.GetPosition().GetY();
+
+
+            return (CalcManhattan(Math.Abs(zombiePos.GetX() - playerX), Math.Abs(zombiePos.GetY() - playerY)) <= sight * 2);
+        }
+        private int CalcManhattan(int diffX, int diffY)
+        {
+            return diffX + diffY;
         }
 
         private void Move()

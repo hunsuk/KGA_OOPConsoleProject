@@ -10,17 +10,35 @@ namespace ZombieGame
 {
     public class Inventory
     {
-        private List<Item> items;
+        private List<Item> items = new List<Item>();
         private int width;
         private int hight;
         private int invenHight;
-        public Inventory(int width, int hight, int invenHight)
+        public Inventory(int width, int hight, int invenHight, List<Isbeing> items)
         {
-            items = new List<Item>();
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (items[i] is Item)
+                {
+                    this.items.Add((Item)items[i]);
+                }
+            }
+
             this.width = width;
             this.hight = hight;
             this.invenHight = invenHight;
         }
+
+        private void SortItems()
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                int width = (i + 1) % this.width;
+                int hight = (i + 1) / this.width;
+                items[i].SetPostion(width, this.hight + hight);
+            }
+        }
+        
 
         public void AddItem(Item item)
         {
@@ -30,21 +48,22 @@ namespace ZombieGame
                 item.SetPostion(1, hight);
             } else
             {
-                for (int i = 0; i < items.Count; i++)
-                {
-                    int width = (i + 1) % this.width;
-                    int hight = (i + 1) / this.width;
-                    items[i].SetPostion(width, this.hight + hight);
-                }
+                SortItems();
             }
         }
 
-        public bool HaveItem(WeaponType weapon)
+        public bool HaveItem(WeaponType weapon, bool inputCheck = false)
         {
             foreach(Item target in items)
             {
-                if (weapon == target.GetWeapon())
+                if (target.IsExistence() && (weapon == target.GetWeapon()))
                 {
+                    if (!inputCheck)
+                    {
+                        target.Disapear();
+                        items.Remove(target);
+                        SortItems();
+                    }
                     return true;
                 }
             }

@@ -19,9 +19,10 @@ namespace ZombieGame
             existence = true;
         }
 
-        public void Attack()
+ 
+        public void Disapear()
         {
-
+            existence = false;
         }
 
         public bool IsExistence()

@@ -13,5 +13,6 @@ namespace ZombieGame
 
         public char GetSign();
 
+        public void Disapear();
     }
 }
