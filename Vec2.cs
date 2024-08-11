@@ -36,12 +36,12 @@ namespace ZombieGame
         {
             return y;
         }
-
-        public static bool operator !=(Vec2 left, Vec2 right)
+      
+        public static bool operator!= (Vec2 left, Vec2 right)
         {
             return left.x != right.x || left.y != right.y; 
         }
-        public static bool operator ==(Vec2 left, Vec2 right)
+        public static bool operator == (Vec2 left, Vec2 right)
         {
             return left.x == right.x && left.y == right.y;
         }

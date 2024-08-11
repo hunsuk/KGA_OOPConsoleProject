@@ -51,6 +51,11 @@ namespace ZombieGame
             return hight + invenHight;
         }
 
+        public int GetInvenHight()
+        {
+            return invenHight;
+        }
+
         public void UpdateObjects(List<Isbeing> objects)
         {
             foreach(Isbeing isbeing in objects)

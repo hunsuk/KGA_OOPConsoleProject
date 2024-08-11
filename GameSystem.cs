@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -31,8 +32,13 @@ namespace ZombieGame
             objects = new List<Isbeing>();
             zombies = new List<Zombie>();
             items = new List<Item>();
-            user = new User(15, 10);
+           
+            user = new User(15, 10, new Inventory(width, hight, invenHight));
+            Item baseWeapon = new Item(1, hight, WeaponType.PISTOL);
+            user.GetInventory().AddItem(baseWeapon);
+           
             objects.Add(user);
+            objects.Add(baseWeapon);
             InitPath(map);
             InitObject(map);
         }
@@ -84,14 +90,26 @@ namespace ZombieGame
         public void Update()
         {
             Move();
+            Crash();
             map.UpdateObjects(objects);
+        }
+
+        public void Crash()
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (items[i].GetPosition() == user.GetPosition())
+                {
+                    user.GetInventory().AddItem(items[i]);
+                }
+            }
         }
 
         public bool GetRunning()
         {
             return running;
         }
-
+       
        
         private void InitObject(Map map)
         {
@@ -108,7 +126,6 @@ namespace ZombieGame
                 }
             }
         }
-
 
         private void InitPath(Map map)
         {

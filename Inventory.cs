@@ -11,15 +11,33 @@ namespace ZombieGame
     public class Inventory
     {
         private List<Item> items;
-
-        public Inventory()
+        private int width;
+        private int hight;
+        private int invenHight;
+        public Inventory(int width, int hight, int invenHight)
         {
             items = new List<Item>();
-            items.Add(new Item(WeaponType.PISTOL));
+            this.width = width;
+            this.hight = hight;
+            this.invenHight = invenHight;
         }
 
-
-        
+        public void AddItem(Item item)
+        {
+            items.Add(item);
+            if (items.Count == 0)
+            {
+                item.SetPostion(1, hight);
+            } else
+            {
+                for (int i = 0; i < items.Count; i++)
+                {
+                    int width = (i + 1) % this.width;
+                    int hight = (i + 1) / this.width;
+                    items[i].SetPostion(width, this.hight + hight);
+                }
+            }
+        }
 
         public bool HaveItem(WeaponType weapon)
         {

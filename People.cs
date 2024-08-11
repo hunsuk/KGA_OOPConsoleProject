@@ -33,7 +33,7 @@ namespace ZombieGame
         {
             return postion;
         }
-
+        
         public abstract char GetSign();
 
         public void MoveUp(Map map)

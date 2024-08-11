@@ -10,9 +10,9 @@ namespace ZombieGame
     {
         private Inventory inventory;
 
-        public User(int x, int y) : base(x, y) 
+        public User(int x, int y, Inventory inventory) : base(x, y) 
         {
-            inventory = new Inventory();
+            this.inventory = inventory;
         }
 
         public Inventory GetInventory()

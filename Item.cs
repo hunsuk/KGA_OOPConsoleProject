@@ -24,6 +24,14 @@ namespace ZombieGame
             existence = true;
         }
 
+        public void GetItem(Vec2 userPostion, Inventory inventory)
+        {
+            if (userPostion == postion)
+            {
+                inventory.AddItem(this);
+            }
+        }
+
         public WeaponType GetWeapon()
         {
             return type;
@@ -50,6 +58,12 @@ namespace ZombieGame
                 default:
                     return ' ';
             }
+        }
+
+        public void SetPostion(int width, int hight)
+        {
+            this.postion.SetX(width);
+            this.postion.SetY(hight);
         }
 
         public bool IsExistence()
