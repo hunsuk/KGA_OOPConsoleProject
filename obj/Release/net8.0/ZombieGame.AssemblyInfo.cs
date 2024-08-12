@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ZombieGame")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6e84ea7ff96e4c26d4c18d669a52eeeac58078f1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d416284969259f06f5b8e865dfeac9a7c856522d")]
 [assembly: System.Reflection.AssemblyProductAttribute("ZombieGame")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ZombieGame")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZombieGame.Enum;
+using ZombieGame.Interface;
+using ZombieGame.Utility;
 
-namespace ZombieGame
+namespace ZombieGame.Object
 {
     public class Item : Isbeing
     {
@@ -19,7 +22,7 @@ namespace ZombieGame
 
         public Item(int x, int y, WeaponType type)
         {
-            this.postion = new Vec2(x, y);
+            postion = new Vec2(x, y);
             this.type = type;
             existence = true;
         }
@@ -44,7 +47,7 @@ namespace ZombieGame
 
         public char GetSign()
         {
-            switch(type)
+            switch (type)
             {
                 case WeaponType.PISTOL:
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
@@ -62,8 +65,8 @@ namespace ZombieGame
 
         public void SetPostion(int width, int hight)
         {
-            this.postion.SetX(width);
-            this.postion.SetY(hight);
+            postion.SetX(width);
+            postion.SetY(hight);
         }
 
         public bool IsExistence()
@@ -73,7 +76,7 @@ namespace ZombieGame
 
         public void Disapear()
         {
-            this.existence = false;    
+            existence = false;
         }
     }
 }

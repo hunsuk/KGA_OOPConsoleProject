@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZombieGame.Enum;
+using ZombieGame.Interface;
+using ZombieGame.Object;
 using static ConsoleProject1.Program;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace ZombieGame
+namespace ZombieGame.Utility
 {
     public class Inventory
     {
@@ -38,7 +41,7 @@ namespace ZombieGame
                 items[i].SetPostion(width, this.hight + hight);
             }
         }
-        
+
 
         public void AddItem(Item item)
         {
@@ -46,7 +49,8 @@ namespace ZombieGame
             if (items.Count == 0)
             {
                 item.SetPostion(1, hight);
-            } else
+            }
+            else
             {
                 SortItems();
             }
@@ -54,9 +58,9 @@ namespace ZombieGame
 
         public bool HaveItem(WeaponType weapon, bool inputCheck = false)
         {
-            foreach(Item target in items)
+            foreach (Item target in items)
             {
-                if (target.IsExistence() && (weapon == target.GetWeapon()))
+                if (target.IsExistence() && weapon == target.GetWeapon())
                 {
                     if (!inputCheck)
                     {
@@ -69,6 +73,5 @@ namespace ZombieGame
             }
             return false;
         }
-    }   
+    }
 }
- 

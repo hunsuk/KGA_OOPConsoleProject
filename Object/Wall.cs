@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZombieGame.Interface;
+using ZombieGame.Utility;
 
-namespace ZombieGame
+namespace ZombieGame.Object
 {
     public class Wall : Isbeing
     {
@@ -13,13 +15,13 @@ namespace ZombieGame
 
         public Wall(int x, int y)
         {
-            this.position = new Vec2(x, y);
+            position = new Vec2(x, y);
             existence = true;
         }
 
         public void Disapear()
         {
-            this.existence = false;
+            existence = false;
         }
 
         public Vec2 GetPosition()

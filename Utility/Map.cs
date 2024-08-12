@@ -5,9 +5,10 @@ using System.Runtime.InteropServices.JavaScript;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using ZombieGame.Interface;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace ZombieGame
+namespace ZombieGame.Utility
 {
     public class Map
     {
@@ -21,7 +22,7 @@ namespace ZombieGame
             this.width = width;
             this.hight = hight;
             this.invenHight = invenHight;
-            
+
             InitMap();
         }
 
@@ -32,14 +33,14 @@ namespace ZombieGame
             {
                 for (int j = 0; j < width; j++)
                 {
-                    map.Add(new Pixel(new Vec2(i,j)));
+                    map.Add(new Pixel(new Vec2(i, j)));
                 }
             }
         }
 
         public List<Pixel> GetMap()
         {
-            return this.map;
+            return map;
         }
 
         public int GetWidth()

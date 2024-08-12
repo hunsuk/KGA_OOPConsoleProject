@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace ZombieGame
+namespace ZombieGame.Utility
 {
     public class Ui
     {
@@ -23,7 +23,29 @@ namespace ZombieGame
             Console.Clear();
         }
 
-       
+        public void End(bool userWin)
+        {
+            Console.Clear();
+            Console.ResetColor();
+            Console.WriteLine("====================================");
+            Console.WriteLine("=                                  =");
+            if (userWin)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("=           PLAYER WIN!            =");
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("=           ZOMBIE WIN!            =");
+                Console.ResetColor();
+            }
+            Console.WriteLine("=                                  =");
+            Console.WriteLine("====================================");
+            Console.WriteLine();
+        }
+
         public void DrawMap(Map map)
         {
             List<Pixel> paths = map.GetMap();
@@ -32,7 +54,7 @@ namespace ZombieGame
             {
                 for (int x = 0; x < map.GetWidth(); x++)
                 {
-                    Console.SetCursorPosition(x , y);
+                    Console.SetCursorPosition(x, y);
                     if (paths[x + map.GetWidth() * y].GetIsbeing() == null)
                     {
                         Console.Write(" ");
@@ -42,7 +64,8 @@ namespace ZombieGame
                         if (paths[x + map.GetWidth() * y].GetIsbeing().IsExistence())
                         {
                             Console.Write(paths[x + map.GetWidth() * y].GetIsbeing().GetSign());
-                        }else
+                        }
+                        else
                         {
                             Console.Write(" ");
                         }

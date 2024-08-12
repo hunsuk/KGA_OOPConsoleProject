@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZombieGame.Utility;
 
-namespace ZombieGame
+namespace ZombieGame.Object
 {
     public class User : People
     {
         private Inventory inventory;
 
-        public User(int x, int y, Inventory inventory) : base(x, y) 
+        public User(int x, int y, Inventory inventory) : base(x, y)
         {
             this.inventory = inventory;
         }
@@ -19,7 +20,7 @@ namespace ZombieGame
         {
             return inventory;
         }
-        
+
         public override char GetSign()
         {
             Console.ForegroundColor = ConsoleColor.Green;

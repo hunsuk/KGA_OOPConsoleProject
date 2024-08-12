@@ -1,25 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using ZombieGame.Enum;
+using ZombieGame.Interface;
+using ZombieGame.Object;
+using ZombieGame.Utility;
 using static ConsoleProject1.Program;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+
+
+//Todo
+// A* 적용
+// 맵 랜더링 초기화
 
 namespace ZombieGame
 {
     public class GameSystem
     {
         private bool running = true;
+        private bool userWin = false;
         private int width = 30;
         private int hight = 20;
         private int invenHight = 5;
         
         private List<Isbeing> objects = null;
-        private List<Zombie> zombies;
         private User user;
         private Map map;
         private ConsoleKey userInput;
@@ -28,22 +38,32 @@ namespace ZombieGame
         public GameSystem()
         {
             map = new Map(width, hight, invenHight);
-            objects = new List<Isbeing>();
-            zombies = new List<Zombie>();
-           
+            objects = new List<Isbeing>();           
             user = new User(15, 10, new Inventory(width, hight, invenHight, objects));
             Item baseWeapon = new Item(1, hight, WeaponType.PISTOL);
             user.GetInventory().AddItem(baseWeapon);
            
             objects.Add(user);
             objects.Add(baseWeapon);
+
             InitPath(map);
             InitObject(map);
+            AstarPath astarPath = new AstarPath(user, map, objects);
+        }
+
+        static double CalcEuclid(int diffX, int diifY)
+        {
+            return Math.Sqrt(Math.Pow(diffX, 2) + Math.Pow(diifY, 2));
         }
 
         public void Start()
         {
             ui.Start();
+        }
+
+        public void End()
+        {
+            ui.End(userWin);
         }
 
         public void Render()
@@ -90,21 +110,62 @@ namespace ZombieGame
             Attack();
             Move();
             Crash();
+            if (!running)
+            {
+                return;
+            }
+            Chase();
             map.UpdateObjects(objects);
+        }
+
+        public void Chase()
+        {
+            // A* 알고리즘
+            
+            for (int i = 0; i < objects.Count; i++)
+            {
+                if (objects[i] is Zombie)
+                {
+                    ((Zombie)objects[i]).Move(user, map);
+                }
+            } 
+            
         }
 
         public void Crash()
         {
+            int zombieCount = 0;
             for (int i = 0; i < objects.Count; i++)
             {
-                if (objects[i] is Item)
+                if (objects[i] is Zombie && objects[i].IsExistence())
                 {
-                    if (objects[i].GetPosition() == user.GetPosition())
+                    zombieCount++;
+                }
+
+                if (objects[i].GetPosition() == user.GetPosition())
+                {
+                    if (objects[i] is Item)
                     {
                         user.GetInventory().AddItem((Item)objects[i]);
+                    } 
+                }
+
+                if (objects[i] is Zombie && objects[i].IsExistence())
+                {
+                    if (AstarPath.CalcEuclid(objects[i].GetPosition(), user.GetPosition()) < 1.45)
+                    {
+                        user.Disapear();
+                        userWin = false;
+                        running = false;
+                        break;
                     }
                 }
-                
+            }
+
+            if (zombieCount == 0)
+            {
+                userWin = true;
+                running = false;
             }
         }
 
@@ -181,11 +242,23 @@ namespace ZombieGame
             // 벽
             objects.Add(new Wall(2, 1));
             objects.Add(new Wall(1, 2));
+            objects.Add(new Wall(width - 2, 2));
             objects.Add(new Wall(width - 3, 2));
             objects.Add(new Wall(width - 3, 3));
             objects.Add(new Wall(width - 3, 4));
             objects.Add(new Wall(width - 3, 5));
             objects.Add(new Wall(width - 3, 6));
+            objects.Add(new Wall(width - 3, 6));
+            objects.Add(new Wall(width - 3, 6));
+            objects.Add(new Wall(width - 3, 7));
+            objects.Add(new Wall(width - 3, 8));
+            objects.Add(new Wall(width - 3, 9));
+            objects.Add(new Wall(width - 3, 10));
+            objects.Add(new Wall(width - 3, 11));
+            objects.Add(new Wall(width - 3, 12));
+            objects.Add(new Wall(width - 3, 13));
+            objects.Add(new Wall(width - 3, 14));
+            objects.Add(new Wall(width - 3, 15));
             objects.Add(new Wall(width - 2, hight - 3));
             objects.Add(new Wall(width - 3, hight - 3));
             objects.Add(new Wall(width - 4, hight - 3));
@@ -217,14 +290,10 @@ namespace ZombieGame
         private void AddZombies()
         {
             Zombie zombie1 = new Zombie(1, 1);
-            Zombie zombie2 = new Zombie(width - 2, 3);
+            Zombie zombie2 = new Zombie(width - 2, 10);
             Zombie zombie3 = new Zombie(1, hight -2 );
             Zombie zombie4 = new Zombie(width - 2, hight - 2);
 
-            zombies.Add(zombie1);
-            zombies.Add(zombie2);
-            zombies.Add(zombie3);
-            zombies.Add(zombie4);
             objects.Add(zombie1);
             objects.Add(zombie2);
             objects.Add(zombie3);
@@ -268,24 +337,25 @@ namespace ZombieGame
 
             if (sight != 0)
             {
-                for (int i = 0; i < zombies.Count; i++)
+                for (int i = 0; i < objects.Count; i++)
                 {
-
-                    if (zombieCount == 0)
+                    if (objects[i] is Zombie)
                     {
-                        break;
+                        if (zombieCount == 0)
+                        {
+                            break;
+                        }
+
+                        if (((Zombie)objects[i]).IsExistence() && shoot(sight, ((Zombie)objects[i]).GetPosition()))
+                        {
+                            ((Zombie)objects[i]).Disapear();
+                            objects.Remove(objects[i]);
+                            zombieCount--;
+
+                        }
                     }
-
-                    if (zombies[i].IsExistence() && shoot(sight, zombies[i].GetPosition()))
-                    {
-                        zombies[i].Disapear();
-                        zombieCount--;
-
-                    }
-
                 }
             }
-
         }
         private bool shoot(int sight, Vec2 zombiePos)
         {

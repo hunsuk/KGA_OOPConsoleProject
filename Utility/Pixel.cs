@@ -4,8 +4,10 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZombieGame.Interface;
+using ZombieGame.Object;
 
-namespace ZombieGame
+namespace ZombieGame.Utility
 {
     public class Pixel
     {
@@ -18,9 +20,9 @@ namespace ZombieGame
         {
             this.postion = postion;
             this.weight = weight;
-            this.path = new List<Pixel>();
+            path = new List<Pixel>();
         }
-        
+
         public Isbeing GetIsbeing()
         {
             return isbeing;
@@ -28,7 +30,7 @@ namespace ZombieGame
 
         public bool IsGo()
         {
-            return !(this.isbeing is Wall);
+            return !(isbeing is Wall);
         }
 
         public void SetWeight(int weight)
@@ -40,7 +42,7 @@ namespace ZombieGame
         {
             path.Add(pixel);
         }
-        
+
         public void SetIsBeing(Isbeing isbeing)
         {
             this.isbeing = isbeing;

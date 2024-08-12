@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZombieGame
+namespace ZombieGame.Utility
 {
     public class Vec2
     {
@@ -36,15 +36,14 @@ namespace ZombieGame
         {
             return y;
         }
-      
-        public static bool operator!= (Vec2 left, Vec2 right)
+
+        public static bool operator !=(Vec2 left, Vec2 right)
         {
-            return left.x != right.x || left.y != right.y; 
+            return left.x != right.x || left.y != right.y;
         }
-        public static bool operator == (Vec2 left, Vec2 right)
+        public static bool operator ==(Vec2 left, Vec2 right)
         {
             return left.x == right.x && left.y == right.y;
         }
-
     }
 }
