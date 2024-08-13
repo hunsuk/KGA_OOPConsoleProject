@@ -66,8 +66,6 @@ namespace ZombieGame.Object
 
         }
 
-    
-
         private void Select()
         {
             double min = openNode[0].Fscore;

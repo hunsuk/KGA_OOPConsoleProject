@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices.JavaScript;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,6 +39,22 @@ namespace ZombieGame.Utility
             }
         }
 
+        public List<Pixel> GetMapBySight(int sight, Vec2 userPos)
+        {
+            List<Pixel> pixels = new List<Pixel>();
+            for (int i = userPos.GetY() - sight; i <= userPos.GetY() + sight; i++)
+            {
+                for (int j = userPos.GetX() - sight; j <= userPos.GetX() + sight; j++)
+                {
+                    if (i >= 0 && j >=0 && j < width && i < hight)
+                    {
+                        pixels.Add(map[j + width * i]);
+                    }
+                }
+            }
+            return pixels;
+        }
+
         public List<Pixel> GetMap()
         {
             return map;
@@ -63,7 +80,8 @@ namespace ZombieGame.Utility
             InitMap();
             foreach (Isbeing isbeing in objects)
             {
-                map[isbeing.GetPosition().GetX() + width * isbeing.GetPosition().GetY()].SetIsBeing(isbeing);
+                if (isbeing.IsExistence())
+                    map[isbeing.GetPosition().GetX() + width * isbeing.GetPosition().GetY()].SetIsBeing(isbeing);
             }
         }
     }

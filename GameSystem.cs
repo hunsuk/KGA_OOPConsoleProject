@@ -107,7 +107,7 @@ namespace ZombieGame
 
         public void Update()
         {
-            Attack();
+            user.Attack(map, userInput);
             Move();
             Crash();
             if (!running)
