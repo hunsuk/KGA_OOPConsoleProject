@@ -28,12 +28,12 @@ namespace ZombieGame.Object
             return 'U';
         }
 
-
-        public void Update(Map map, ConsoleKey userInput)
+            
+        public void Update(Map map, ConsoleKey userInput, ConsoleKey beforInput)
         {
             Attack(map, userInput);
+            Move(map, beforInput);
         }
-
 
 
         public void Attack(Map map, ConsoleKey userInput)
@@ -97,6 +97,101 @@ namespace ZombieGame.Object
                     }
                     break;
             }
+        }
+        private void Move(Map map, ConsoleKey userInput)
+        {
+            switch (userInput)
+            {
+                case ConsoleKey.W:
+                case ConsoleKey.UpArrow:
+                    MoveUp(map);
+                    break;
+                case ConsoleKey.S:
+                case ConsoleKey.DownArrow:
+                    MoveDown(map);
+                    break;
+                case ConsoleKey.A:
+                case ConsoleKey.LeftArrow:
+                    MoveLeft(map);
+                    break;
+                case ConsoleKey.D:
+                case ConsoleKey.RightArrow:
+                    MoveRight(map);
+                    break;
+            }
+        }
+
+        private bool MoveUp(Map map, bool move = true)
+        {
+            Pixel moveTo = map.GetMap()[postion.GetX() + map.GetWidth() * (postion.GetY() - 1)];
+            if (moveTo.IsGo())
+            {
+                if (move)
+                {
+                    if (moveTo.GetIsbeing() is Item)
+                    {
+                        GetInventory().AddItem((Item)moveTo.GetIsbeing());
+                    }
+                    map.GetMap()[postion.GetX() + map.GetWidth() * postion.GetY()].SetIsBeing(null);
+                    postion.SetY(postion.GetY() - 1);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private bool MoveDown(Map map, bool move = true)
+        {
+            Pixel moveTo = map.GetMap()[postion.GetX() + map.GetWidth() * (postion.GetY() + 1)];
+
+            if (map.GetMap()[postion.GetX() + map.GetWidth() * (postion.GetY() + 1)].IsGo())
+            {
+                if (move)
+                {
+                    if (moveTo.GetIsbeing() is Item)
+                    {
+                        GetInventory().AddItem((Item)moveTo.GetIsbeing());
+                    }
+                    map.GetMap()[postion.GetX() + map.GetWidth() * postion.GetY()].SetIsBeing(null);
+                    postion.SetY(postion.GetY() + 1);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private bool MoveLeft(Map map, bool move = true)
+        {
+            Pixel moveTo = map.GetMap()[postion.GetX() - 1 + map.GetWidth() * postion.GetY()];
+
+            if (map.GetMap()[postion.GetX() - 1 + map.GetWidth() * postion.GetY()].IsGo())
+            {
+                if (moveTo.GetIsbeing() is Item)
+                {
+                    GetInventory().AddItem((Item)moveTo.GetIsbeing());
+                }
+                map.GetMap()[postion.GetX() + map.GetWidth() * postion.GetY()].SetIsBeing(null);
+                postion.SetX(postion.GetX() - 1);
+                return true;
+            }
+            return false;
+        }
+
+        private bool MoveRight(Map map, bool move = true)
+        {
+            Pixel moveTo = map.GetMap()[postion.GetX() + 1 + map.GetWidth() * postion.GetY()];
+
+            if (map.GetMap()[postion.GetX() + 1 + map.GetWidth() * postion.GetY()].IsGo())
+            {
+                if (moveTo.GetIsbeing() is Item)
+                {
+                    GetInventory().AddItem((Item)moveTo.GetIsbeing());
+                }
+                map.GetMap()[postion.GetX() + map.GetWidth() * postion.GetY()].SetIsBeing(null);
+                postion.SetX(postion.GetX() + 1);
+                return true;
+            }
+            return false;
         }
     }
 }

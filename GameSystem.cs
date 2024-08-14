@@ -33,6 +33,7 @@ namespace ZombieGame
         private User user;
         private Map map;
         private ConsoleKey userInput;
+        private ConsoleKey beforInput;
         private Ui ui = new Ui();
 
         public GameSystem()
@@ -79,7 +80,17 @@ namespace ZombieGame
             Console.ForegroundColor = ConsoleColor.Black;
             do
             {
-                userInput = Console.ReadKey().Key;
+                //userInput = Console.ReadKey(true).Key;
+                Thread.Sleep(150);
+                if (Console.KeyAvailable)
+                {
+                    userInput = Console.ReadKey(true).Key;
+                }
+                else
+                {
+                    break;
+                }
+
                 if (((int)userInput >= 49 && (int)userInput <= 51) || ((int)userInput >= 37 && (int)userInput <= 40))
                 {
                     if ((int)userInput >= 49 && (int)userInput <= 51)
@@ -95,6 +106,7 @@ namespace ZombieGame
                     }
                     else
                     {
+                        beforInput = userInput;
                         check = false;
                     }
                 }
@@ -107,33 +119,36 @@ namespace ZombieGame
 
         public void Update()
         {
-            user.Attack(map, userInput);
-            Move();
+
+            user.Update(map, userInput, beforInput);
             Crash();
-            if (!running)
-            {
-                return;
-            }
-            Chase();
+            Chase(ref running);
             map.UpdateObjects(objects);
+            //userInput = ConsoleKey.Tab;
         }
 
-        public void Chase()
+        public void Chase(ref bool running)
         {
             // A* 알고리즘
             
             for (int i = 0; i < objects.Count; i++)
             {
-                if (objects[i] is Zombie)
+                if (objects[i].IsExistence() && objects[i] is Zombie)
                 {
                     ((Zombie)objects[i]).Move(user, map);
                 }
-            } 
-            
+            }
+
+            if (!user.IsExistence())
+                running = false;
         }
 
         public void Crash()
         {
+            if (!running)
+            {
+                return;
+            }
             int zombieCount = 0;
             for (int i = 0; i < objects.Count; i++)
             {
@@ -142,19 +157,10 @@ namespace ZombieGame
                     zombieCount++;
                 }
 
-                if (objects[i].GetPosition() == user.GetPosition())
-                {
-                    if (objects[i] is Item)
-                    {
-                        user.GetInventory().AddItem((Item)objects[i]);
-                    } 
-                }
-
                 if (objects[i] is Zombie && objects[i].IsExistence())
                 {
                     if (AstarPath.CalcEuclid(objects[i].GetPosition(), user.GetPosition()) < 1.45)
                     {
-                        user.Disapear();
                         userWin = false;
                         running = false;
                         break;
@@ -291,106 +297,13 @@ namespace ZombieGame
         {
             Zombie zombie1 = new Zombie(1, 1);
             Zombie zombie2 = new Zombie(width - 2, 10);
-            Zombie zombie3 = new Zombie(1, hight -2 );
+            Zombie zombie3 = new Zombie(1, hight - 2);
             Zombie zombie4 = new Zombie(width - 2, hight - 2);
 
             objects.Add(zombie1);
             objects.Add(zombie2);
             objects.Add(zombie3);
             objects.Add(zombie4);
-        }
-
-        private void Attack()
-        {
-            int sight = 0;
-            int zombieCount = 0;
-            switch (userInput)
-            {
-
-                // 권총 
-                case ConsoleKey.D1:
-                    if (user.GetInventory().HaveItem(WeaponType.PISTOL))
-                    {
-                        sight = 1;
-                        zombieCount = 1;
-                    }
-                    break;
-
-                // 소총
-                case ConsoleKey.D2:
-                    if (user.GetInventory().HaveItem(WeaponType.RIFLE))
-                    {
-                        sight = 2;
-                        zombieCount = 1;
-                    }
-                    break;
-
-                //샷건
-                case ConsoleKey.D3:
-                    if (user.GetInventory().HaveItem(WeaponType.SHOTGUN))
-                    {
-                        sight = 2;
-                        zombieCount = 2;
-                    }
-                    break;
-            }
-
-            if (sight != 0)
-            {
-                for (int i = 0; i < objects.Count; i++)
-                {
-                    if (objects[i] is Zombie)
-                    {
-                        if (zombieCount == 0)
-                        {
-                            break;
-                        }
-
-                        if (((Zombie)objects[i]).IsExistence() && shoot(sight, ((Zombie)objects[i]).GetPosition()))
-                        {
-                            ((Zombie)objects[i]).Disapear();
-                            objects.Remove(objects[i]);
-                            zombieCount--;
-
-                        }
-                    }
-                }
-            }
-        }
-        private bool shoot(int sight, Vec2 zombiePos)
-        {
-            int playerX = user.GetPosition().GetX();
-            int playerY = user.GetPosition().GetY();
-
-
-            return (CalcManhattan(Math.Abs(zombiePos.GetX() - playerX), Math.Abs(zombiePos.GetY() - playerY)) <= sight * 2);
-        }
-        private int CalcManhattan(int diffX, int diffY)
-        {
-            return diffX + diffY;
-        }
-
-        private void Move()
-        {
-            switch (userInput)
-            {
-                case ConsoleKey.W:
-                case ConsoleKey.UpArrow:
-                    user.MoveUp(map);
-                    break;
-                case ConsoleKey.S:
-                case ConsoleKey.DownArrow:
-                    user.MoveDown(map);
-                    break;
-                case ConsoleKey.A:
-                case ConsoleKey.LeftArrow:
-                    user.MoveLeft(map);
-                    break;
-                case ConsoleKey.D:
-                case ConsoleKey.RightArrow:
-                    user.MoveRight(map);
-                    break;
-            }
         }
     }
 }

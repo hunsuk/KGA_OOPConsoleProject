@@ -19,7 +19,7 @@ namespace ZombieGame.Utility
             Console.WriteLine("====================================");
             Console.WriteLine();
             Console.WriteLine("    계속하려면 아무키나 누르세요    ");
-            Console.ReadKey();
+            Console.ReadKey(false);
             Console.Clear();
         }
 

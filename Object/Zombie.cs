@@ -58,6 +58,12 @@ namespace ZombieGame.Object
                             temp = temp.parent;
                         }
                         this.SetPostion(temp.position.GetX(), temp.position.GetY());
+                        if (AstarPath.CalcEuclid(GetPosition(), user.GetPosition()) < 1.1)
+                        {
+                            user.Disapear();
+                            
+                            break;
+                        }
                     }
                    
                     break;

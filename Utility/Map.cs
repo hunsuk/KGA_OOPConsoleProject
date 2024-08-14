@@ -83,6 +83,7 @@ namespace ZombieGame.Utility
                 if (isbeing.IsExistence())
                     map[isbeing.GetPosition().GetX() + width * isbeing.GetPosition().GetY()].SetIsBeing(isbeing);
             }
+
         }
     }
 }
